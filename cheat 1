@@ -1,0 +1,203 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct aPatient {
+    string aName;
+    string aSick;
+    int aAge;
+};
+
+struct aEmployee {
+    string bName;
+    string bPosition;
+    int bAge;
+};
+
+struct aInventory {
+    string nameItem;
+    int itemPrice;
+};
+
+struct Node {
+    aPatient aPerson;
+    aEmployee anEmployee;
+    aInventory aItem;
+    Node* next;
+};
+
+
+void addRecords1(const aPatient& aPerson, Node*& head);
+void addRecords2(const aEmployee& anEmployee, Node*& head);
+void newEmployee(Node*& head);
+void newPatient(Node*& head);
+void addInventory(Node*& head);
+void viewRecords(Node* head);
+void viewInventory(Node* head);
+void deleteLinkedList(Node*& head); 
+
+int main() {
+    Node* head = nullptr;
+    int aChoice;
+
+    do {
+        cout << "WELCOME TO MAVE AQUINO HOSPITAL(M.A.H)" << endl;
+        cout << "----------------------------------------------------------------------------" << endl;
+        cout << "MENU: " << endl;
+        cout << " " << endl;
+        cout << "Add Employee [1]" << endl;
+        cout << "Add Patient [2]" << endl;
+        cout << "Add Inventory [3]" << endl;
+        cout << "View Records [4]" << endl;
+        cout << "View Inventory [5]" << endl;
+        cout << "Exit [6]" << endl;
+        cout << "Enter your choice: ";
+        cin >> aChoice;
+
+        switch (aChoice) {
+        case 1:
+            newEmployee(head);
+            break;
+
+        case 2:
+            newPatient(head);
+            break;
+
+        case 3:
+            addInventory(head);
+            break;
+
+        case 4:
+            viewRecords(head);
+            break;
+
+        case 5:
+            viewInventory(head);
+            break;
+
+        case 6:
+            cout << "Exiting program..." << endl;
+            deleteLinkedList(head);
+            return 0;
+
+        default:
+            cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (aChoice != 6);
+
+    return 0;
+}
+
+void addRecords1(const aPatient& aPerson, Node*& head) {
+    Node* newNode = new Node;
+    newNode->aPerson = aPerson;
+    newNode->next = head;
+    head = newNode;
+}
+
+void addRecords2(const aEmployee& anEmployee, Node*& head) {
+    Node* newNode = new Node;
+    newNode->anEmployee = anEmployee;
+    newNode->next = head;
+    head = newNode;
+}
+
+void newEmployee(Node*& head) {
+    aEmployee anEmployee;
+    cout << "Enter Name: ";
+    cin >> anEmployee.bName;
+    cout << "Enter age: ";
+    cin >> anEmployee.bAge;
+    cout << "Enter Position: ";
+    cin >> anEmployee.bPosition;
+    addRecords2(anEmployee, head);
+    cout << "Employee added successfully!" << endl;
+}
+
+void newPatient(Node*& head) {
+    aPatient aPerson;
+    cout << "Enter Name: ";
+    cin >> aPerson.aName;
+    cout << "Enter age: ";
+    cin >> aPerson.aAge;
+    cout << "Enter Case: ";
+    cin >> aPerson.aSick;
+    addRecords1(aPerson, head);
+    cout << "Patient added successfully!" << endl;
+}
+
+void addInventory(Node*& head) {
+    aInventory aItem;
+    cout << "Enter Item: ";
+    cin >> aItem.nameItem;
+    cout << "Price: ";
+    cin >> aItem.itemPrice;
+
+    Node* newNode = new Node;
+    newNode->aItem = aItem;
+    newNode->next = head;
+    head = newNode;
+    cout << "Inventory item added successfully!" << endl;
+}
+
+void viewRecords(Node* head) {
+    Node* current = head;
+    
+    cout << "RECORDS: " << endl;
+    cout << " " << endl;
+    
+    while (current != nullptr) {
+        if (!current->anEmployee.bName.empty()) {
+            cout << "EMPLOYEE:" << endl;
+            cout << "Name: " << current->anEmployee.bName << endl;
+            cout << "Age: " << current->anEmployee.bAge << endl;
+            cout << "Position: " << current->anEmployee.bPosition << endl;
+            cout << "---------------------------------------" << endl;
+        }
+        
+        if (!current->aPerson.aName.empty()) {
+            cout << "PATIENT:" << endl;
+            cout << "Name: " << current->aPerson.aName << endl;
+            cout << "Age: " << current->aPerson.aAge << endl;
+            cout << "Case: " << current->aPerson.aSick << endl;
+            cout << "---------------------------------------" << endl;
+        }
+        
+        current = current->next;
+    }
+}
+
+
+void viewInventory(Node* head) {
+    cout << "INVENTORY: " << endl;
+    cout << " " << endl;
+
+    Node* current = head;
+    int totalValue = 0; 
+
+    while (current != nullptr) {
+        cout << "Name: " << current->aItem.nameItem << endl;
+        cout << "Price: " << current->aItem.itemPrice << endl;
+        cout << "---------------------------------------" << endl;
+        
+        
+        totalValue += current->aItem.itemPrice;
+
+        current = current->next;
+    }
+
+   
+    cout << "Total Value of Inventory: " << totalValue << endl;
+}
+
+
+
+void deleteLinkedList(Node*& head) {
+    Node* current = head;
+    while (current != nullptr) {
+        Node* next = current->next;
+        delete current;
+        current = next;
+    }
+    head = nullptr;
+}
